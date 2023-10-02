@@ -21,11 +21,22 @@ custom_button_style = {
 }
 
 # ---------------------------- TIMER RESET ------------------------------- # 
-
-# ---------------------------- TIMER MECHANISM ------------------------------- # 
-
+timer_string="05:00"
+# ---------------------------- TIMER MECHANISM ------------------------------- #
+def start_timer():
+    count_time(300)
+    
+    
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+def count_time(c):
+    min=f'0{c//60}'
+    sec=c%60
+    sec=f'0{sec}' if sec<10 else str(sec)
+    canvas.itemconfig(text_item,text=min+':'+sec)
 
+    if c>0:
+        window.after(1000,count_time,c-1)
+    
 # ---------------------------- UI SETUP ------------------------------- #
 
 window=Tk()
@@ -34,12 +45,12 @@ window.config(padx=100,pady=100,background=YELLOW)
 canvas=Canvas(width=250, height=250,background=YELLOW,highlightthickness=0)
 tomato_img=PhotoImage(file="tomato.png")
 canvas.create_image(120,120, image=tomato_img)
-canvas.create_text(120, 130, text='00:00',fill="white",font=(FONT_NAME,35,"bold "))
+text_item=canvas.create_text(120, 130, text=timer_string,fill="white",font=(FONT_NAME,35,"bold "))
 canvas.grid(row=1,column=1)
-start_button=Button(text="Start",**custom_button_style)
+start_button=Button(text="Start",**custom_button_style,command=start_timer)
 start_button.grid(row=2,column=0)
 
-Reset_button=Button(text="Reset",**custom_button_style)
+Reset_button=Button(text="Reset",**custom_button_style,command=window.update)
 Reset_button.grid(row=2,column=2)
 
 window.mainloop()
